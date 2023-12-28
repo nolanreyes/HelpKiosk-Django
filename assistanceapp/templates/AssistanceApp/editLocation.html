@@ -1,0 +1,15 @@
+{% extends 'AssistanceApp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Edit Location</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Resource Name: {{ location.resource_name }}</p>
+        <button type="submit">Save</button>
+    </form>
+
+    <a href="{% url 'manageLocations' %}">Back to Manage Locations</a>
+{% endblock %}

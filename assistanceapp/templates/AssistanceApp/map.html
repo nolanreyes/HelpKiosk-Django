@@ -1,0 +1,71 @@
+{% extends 'AssistanceApp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div id="map" style="height: 80vh;"></div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="button-container">
+                <a class="btn btn-primary" href="{% url 'manageLocations' %}">+ Add Location</a>
+            </div>
+            <div class="col-4">
+                <button id="show-location-button" class="btn btn-primary btn-block">Show My Location</button>
+            </div>
+        </div>
+    </div>
+
+    {{ locations|json_script:"locations_json" }}
+    <script>
+        const map = L.map('map').setView([53.349805, -6.26031], 13); // initial map coordinates and zoom level
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let locations = JSON.parse(document.getElementById('locations_json').textContent)
+
+        locations.forEach(location => {
+            L.marker([location.latitude, location.longitude]).addTo(map)
+        })
+
+        // Live location
+        function showLiveLocation() {
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+
+        let marker, circle;
+
+        // Button click event
+        document.getElementById('show-location-button').addEventListener('click', showLiveLocation);
+
+        function success(pos) {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            const accuracy = pos.coords.accuracy;
+
+            if (marker) {
+                map.removeLayer(marker);
+                map.removeLayer(circle);
+            }
+
+            marker = L.marker([lat, lng]).addTo(map);
+            circle = L.circle([lat, lng], {radius: accuracy}).addTo(map);
+
+            map.setView([lat, lng]);
+        }
+
+        function error(err) {
+            if (err.code === 1) {
+                alert("Please allow location access");
+            } else {
+                alert("Cannot get current location")
+            }
+        }
+    </script>
+{% endblock %}
+

@@ -1,0 +1,16 @@
+{% extends 'AssistanceApp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Delete Location</h1>
+
+    <p>Are you sure you want to delete '{{ location.resource_name }}'?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="resource_name" value="{{ location.resource_name }}">
+        <button type="submit">Delete</button>
+    </form>
+
+    <a href="{% url 'manageLocations' %}">Back to Manage Locations</a>
+{% endblock %}

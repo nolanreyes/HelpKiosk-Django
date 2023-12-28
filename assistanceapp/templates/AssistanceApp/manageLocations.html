@@ -1,0 +1,44 @@
+{% extends 'AssistanceApp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Manage Locations</h1>
+
+    <!-- create new locations -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
+    <hr>
+
+    <!-- display locations from db -->
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for location in locations %}
+            <tr>
+                <td>{{ location.resource_name }}</td>
+                <td>{{ location.latitude }}</td>
+                <td>{{ location.longitude }}</td>
+                <td>
+                    <a href="{% url 'editLocation' location.resource_name %}">Edit</a>
+                    <a href="{% url 'deleteLocation' location.resource_name %}">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No locations found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
