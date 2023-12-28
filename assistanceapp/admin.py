@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib.gis import admin
+from .models import Location
 
-# Register your models here.
+
+class LocationAdmin(admin.GISModelAdmin):
+    admin.site.register(Location, admin.GISModelAdmin)
