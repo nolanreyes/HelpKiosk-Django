@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'rest_framework',
+    'rest_framework',
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
@@ -139,4 +139,9 @@ LEAFLET_CONFIG = {
     'Reset_VIEW': False,
     'SCALE': None,
     'OPACITY': 0.5,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }

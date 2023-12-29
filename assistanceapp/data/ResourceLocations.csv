@@ -1,4 +1,4 @@
-resource_name,latitude,longitude
-Simon Communities Ireland,53.35277599228866,-6.272074586169362
-Depaul Ireland,53.34206579049144,-6.2723923951006455
-St Vincent De Paul Shelter,53.342452227436794,-6.273533416954349
+resource_name,latitude,longitude,location_type,address,description,hours
+Simon Communities Ireland,53.35277599228866,-6.272074586169362,SHELTER,"123 Main Street, Dublin","Shelter provided by Simon Communities Ireland","07:00-18:00"
+Depaul Ireland,53.34206579049144,-6.2723923951006455,SHELTER,"456 Oak Road, Dublin","Depaul Ireland shelter for the homeless and underprivileged","07:00-18:00"
+St Vincent De Paul Shelter,53.342452227436794,-6.273533416954349,SHELTER,"789 Pine Ave, Dublin","St Vincent De Paul Shelter for immediate homeless assistance","07:00-18:00"

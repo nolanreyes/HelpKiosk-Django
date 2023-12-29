@@ -6,6 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from .serializers import LocationSerializer
 
 
 def register_page(request):
@@ -66,7 +68,11 @@ def map_view(request):
             Location.objects.create(
                 resource_name=row['resource_name'],
                 latitude=row['latitude'],
-                longitude=row['longitude']
+                longitude=row['longitude'],
+                location_type=row.get('location_type', 'OTHER'),
+                address=row.get('address', ''),
+                description=row.get('description', ''),
+                hours=row.get('hours', '')
             )
     locations = list(Location.objects.values('latitude', 'longitude')[:100])
     context = {'locations': locations}
@@ -113,3 +119,6 @@ def delete_location(request, resource_name):
     return redirect('manageLocations')
 
 
+class LocationViewSet(viewsets.ModelViewSet):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer

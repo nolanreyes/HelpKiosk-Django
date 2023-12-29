@@ -17,10 +17,13 @@
     <table>
         <thead>
         <tr>
-            <th>Name</th>
+            <th>Resource Name</th>
             <th>Latitude</th>
             <th>Longitude</th>
-            <th>Actions</th>
+            <th>Type</th>
+            <th>Address</th>
+            <th>Description</th>
+            <th>Hours</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +32,10 @@
                 <td>{{ location.resource_name }}</td>
                 <td>{{ location.latitude }}</td>
                 <td>{{ location.longitude }}</td>
+                <td>{{ location.get_location_type_display }}</td>
+                <td>{{ location.address }}</td>
+                <td>{{ location.description }}</td>
+                <td>{{ location.hours }}</td>
                 <td>
                     <a href="{% url 'editLocation' location.resource_name %}">Edit</a>
                     <a href="{% url 'deleteLocation' location.resource_name %}">Delete</a>
@@ -36,7 +43,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="4">No locations found.</td>
+                <td colspan="7">No locations found.</td>
             </tr>
         {% endfor %}
         </tbody>
