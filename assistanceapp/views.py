@@ -120,5 +120,5 @@ def delete_location(request, resource_name):
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all()
+    queryset = Location.objects.all().order_by('id')
     serializer_class = LocationSerializer

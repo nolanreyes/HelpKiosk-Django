@@ -18,6 +18,8 @@ class Location(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     hours = models.CharField(max_length=100, null=True, blank=True)
+    class Meta:
+        db_table = 'location'
 
     def __str__(self):
         return self.resource_name

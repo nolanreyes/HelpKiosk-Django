@@ -5,4 +5,13 @@ from .models import Location
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = "__all__"
+        fields = [
+            'id',
+            'resource_name',
+            'latitude',
+            'longitude',
+            'location_type',
+            'address',
+            'description',
+            'hours'
+        ]
