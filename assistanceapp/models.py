@@ -8,6 +8,8 @@ class Location(models.Model):
         ('FOOD', 'Food'),
         ('HEALTH', 'Health Services'),
         ('HYGIENE', 'Hygiene'),
+        ('LEGAL', 'Legal'),
+        ('WIFI', 'Wifi'),
         ('OTHER', 'Other'),
     ]
 
