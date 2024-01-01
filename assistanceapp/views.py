@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 import pandas as pd
+from rest_framework.permissions import AllowAny
+
 from .models import Location
 from .forms import LocationEdit, CreateUserForm
 from django.contrib.auth.forms import UserCreationForm
@@ -8,6 +10,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import LocationSerializer
+import requests
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 def register_page(request):
@@ -122,3 +128,26 @@ def delete_location(request, resource_name):
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all().order_by('id')
     serializer_class = LocationSerializer
+
+
+class GetWeatherData(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        api_key = '77a4c49ffa3bb54972685765aea215f0'
+        # You can use dynamic latitude and longitude or a fixed location
+        latitude = '53.3498'  # Example latitude for Dublin
+        longitude = '-6.2603'  # Example longitude for Dublin
+
+        # URL for OpenWeatherMap API
+        url = f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric'
+
+        response = requests.get(url)
+        data = response.json()
+
+        if response.status_code == 200:
+            # Return the data as JSON
+            return Response(data)
+        else:
+            # Handle errors or unsuccessful responses
+            return Response(data, status=response.status_code)

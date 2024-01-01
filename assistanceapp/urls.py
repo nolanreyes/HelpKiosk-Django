@@ -2,6 +2,7 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
 from .views import LocationViewSet
+from .views import GetWeatherData
 
 router = DefaultRouter()
 router.register(r'locations', LocationViewSet)
@@ -13,7 +14,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
 
     # app paths
-    path('', views.base, name='base'),
+    path('manage', views.base, name='base'),
     path('map/', views.map_view, name='map'),
     path('manageLocations/', views.manage_locations, name='manageLocations'),
     path('editLocation/<str:resource_name>/', views.edit_location, name='editLocation'),
@@ -21,5 +22,6 @@ urlpatterns = [
 
     # RESTFUL
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('weather/', GetWeatherData.as_view(), name='get_weather'),
 ]
