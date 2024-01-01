@@ -135,11 +135,9 @@ class GetWeatherData(APIView):
 
     def get(self, request, *args, **kwargs):
         api_key = '77a4c49ffa3bb54972685765aea215f0'
-        # You can use dynamic latitude and longitude or a fixed location
         latitude = '53.3498'  # Example latitude for Dublin
         longitude = '-6.2603'  # Example longitude for Dublin
 
-        # URL for OpenWeatherMap API
         url = f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric'
 
         response = requests.get(url)
@@ -149,5 +147,4 @@ class GetWeatherData(APIView):
             # Return the data as JSON
             return Response(data)
         else:
-            # Handle errors or unsuccessful responses
             return Response(data, status=response.status_code)
