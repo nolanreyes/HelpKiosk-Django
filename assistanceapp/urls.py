@@ -23,5 +23,5 @@ urlpatterns = [
     # RESTFUL
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('weather/', GetWeatherData.as_view(), name='get_weather'),
+    path('api/weather/', GetWeatherData.as_view(), name='get_weather'),
 ]
