@@ -1,4 +1,4 @@
-PROJECT_NAME = "HelpKiosk"
+PROJECT_NAME = "helpkiosk"
 
 POSTGIS_PORT = 25432
 
