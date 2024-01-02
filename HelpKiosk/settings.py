@@ -17,9 +17,9 @@ with open('secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+# DEBUG = True
 
-#ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', 'localhost']
+# ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -78,10 +78,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gis',
-        #'HOST': 'dylan_db',
+        # 'HOST': 'dylan_db',
         'USER': 'docker',
         'PASSWORD': 'docker',
-        #'PORT': 5432
+        # 'PORT': 5432
     }
 }
 
@@ -128,7 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#CRISPY_FAIL_SILENTLY = not DEBUG
+# CRISPY_FAIL_SILENTLY = not DEBUG
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (53.0, -8.0),
