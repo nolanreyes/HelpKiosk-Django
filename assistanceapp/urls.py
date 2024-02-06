@@ -21,7 +21,7 @@ urlpatterns = [
     path('deleteLocation/<str:resource_name>/', views.delete_location, name='deleteLocation'),
 
     # RESTFUL
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('weather/', GetWeatherData.as_view(), name='get_weather'),
+    path('api/weather/', GetWeatherData.as_view(), name='get_weather'),
 ]

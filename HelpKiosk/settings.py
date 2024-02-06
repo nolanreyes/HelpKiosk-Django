@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'leaflet',
     'assistanceapp',
-    'shelterManagement'
 ]
 
 MIDDLEWARE = [
