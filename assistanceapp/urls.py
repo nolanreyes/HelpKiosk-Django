@@ -14,14 +14,14 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
 
     # app paths
-    path('manage', views.base, name='base'),
+    path('manage/', views.base, name='base'),
     path('map/', views.map_view, name='map'),
     path('manageLocations/', views.manage_locations, name='manageLocations'),
     path('editLocation/<str:resource_name>/', views.edit_location, name='editLocation'),
     path('deleteLocation/<str:resource_name>/', views.delete_location, name='deleteLocation'),
 
     # RESTFUL
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/weather/', GetWeatherData.as_view(), name='get_weather'),
+    path('weather/', GetWeatherData.as_view(), name='get_weather'),
 ]
