@@ -14,7 +14,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
 
     # app paths
-    path('manage/', views.base, name='base'),
+    path('', views.base, name='base'),
     path('map/', views.map_view, name='map'),
     path('manageLocations/', views.manage_locations, name='manageLocations'),
     path('editLocation/<str:resource_name>/', views.edit_location, name='editLocation'),

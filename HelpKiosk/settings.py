@@ -16,8 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open('secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+    # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 # ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', 'localhost']
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
+    'django_htmx',
     'assistanceapp',
     'sheltermanagement'
 ]
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'HelpKiosk.urls'
@@ -158,7 +160,7 @@ else:
     DATABASES["default"]["PORT"] = 5432
     SECURE_SSL_REDIRECT = True
 if docker_config.DEPLOY_SECURE:
-    DEBUG = False
+    #DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
     ALLOWED_HOSTS = ['.dylannolan.com', 'localhost']
     CSRF_COOKIE_SECURE = True

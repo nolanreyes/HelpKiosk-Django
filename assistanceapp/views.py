@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import LocationSerializer
 import requests
+import json
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -148,3 +149,16 @@ class GetWeatherData(APIView):
             return Response(data)
         else:
             return Response(data, status=response.status_code)
+
+
+# Bookings
+def send_booking_request(room_id, check_in_date, check_out_date):
+    data = {
+        'room': room_id,
+        'check_in_date': check_in_date,
+        'check_out_date': check_out_date,
+        # fix these and add more info
+    }
+    response = requests.post('http://localhost:8000/sheltermanagement/api/bookings/', data=json.dumps(data),
+                             headers={'Content-Type': 'application/json'})
+    return response.json()
