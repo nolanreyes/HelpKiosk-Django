@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shelter Management System</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body>
+<div class="sidebar">
+    <!-- Navigation -->
+    <ul>
+        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'rooms' %}">Rooms</a></li>
+        <li><a href="{% url 'beds' %}">Beds</a></li>
+        <li><a href="{% url 'guests' %}">Guests</a></li>
+        <li><a href="{% url 'management' %}">Management</a></li>
+    </ul>
+</div>
+<main>
+        {% block content %}
+        base huh
+        {% endblock %}
+    <main>
+</body>
+</html>
