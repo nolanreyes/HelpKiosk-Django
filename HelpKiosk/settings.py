@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'leaflet',
     'django_htmx',
     'assistanceapp',
-    'sheltermanagement'
+    'sheltermanagement',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'HelpKiosk.urls'
@@ -151,6 +155,10 @@ REST_FRAMEWORK = {
 # Allow all origins for testing purposes
 CORS_ALLOW_ALL_ORIGINS = True
 
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
+TAILWIND_APP_NAME = 'theme'
+
 if socket.gethostname() == "Dylan-XPS":
     DATABASES["default"]["HOST"] = "localhost"
     DATABASES["default"]["PORT"] = docker_config.POSTGIS_PORT
@@ -160,7 +168,7 @@ else:
     DATABASES["default"]["PORT"] = 5432
     SECURE_SSL_REDIRECT = True
 if docker_config.DEPLOY_SECURE:
-    #DEBUG = False
+    # DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
     ALLOWED_HOSTS = ['.dylannolan.com', 'localhost']
     CSRF_COOKIE_SECURE = True
