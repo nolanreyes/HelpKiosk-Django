@@ -11,6 +11,14 @@
         <p><strong>Room Number:</strong> {{ room.room_number }}</p>
         <p><strong>Capacity:</strong> {{ room.capacity }}</p>
         <p><strong>Gender Allocation:</strong> {{ room.get_gender_allocation_display }}</p>
+
+        <div class="text-right mb-4">
+            <a href="{% url 'add_bed' room_id=room.id %}"
+               class="bg-blue-300 hover:bg-blue-100 text-black font-bold py-1 px-3 rounded">
+                Add Bed +
+            </a>
+        </div>
+        <!-- Beds -->
         <div class="flex flex-wrap -mx-2">
             {% for bed in room.beds.all %}
                 <div class="w-full sm:w-1/2 md:w-1/3 px-2 py-2">
@@ -21,6 +29,10 @@
                             <p>Guest Wallet: {{ bed.guest.wallet_address }}</p>
                             <p>Guest Gender: {{ bed.guest.gender }}</p>
                         {% endif %}
+                        <a href="{% url 'edit_bed' room.id bed.id %}"
+                           class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded text-xs">
+                            Edit
+                        </a>
                     </div>
                 </div>
             {% endfor %}

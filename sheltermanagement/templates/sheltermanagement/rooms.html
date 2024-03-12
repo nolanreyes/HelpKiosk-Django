@@ -28,7 +28,7 @@
                         </a>
                     </td>
                     <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ room.room_number }}</td>
-                    <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">0/{{ room.capacity }}</td>
+                    <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ room.occupancy }}</td>
                     <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">{{ room.gender_allocation }}</td>
                 </tr>
             {% empty %}
