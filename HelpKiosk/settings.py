@@ -30,14 +30,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'assistanceapp',
+    'sheltermanagement',
     'rest_framework',
     'corsheaders',
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
     'django_htmx',
-    'assistanceapp',
-    'sheltermanagement',
     'tailwind',
     'theme',
     'django_browser_reload',
@@ -109,6 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'assistanceapp.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

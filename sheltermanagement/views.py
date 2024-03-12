@@ -1,5 +1,4 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
 from sheltermanagement.models import Room
 
 
@@ -13,10 +12,14 @@ def dashboard(request):
     return render(request, 'sheltermanagement/dashboard.html')
 
 
-def rooms(request):
-    # Fetch rooms data
+def rooms_display(request):
     rooms = Room.objects.all()
     return render(request, 'sheltermanagement/rooms.html', {'rooms': rooms})
+
+
+def room_details(request, id):
+    room = get_object_or_404(Room, id=id)
+    return render(request, 'sheltermanagement/room_details.html', {'room': room})
 
 
 def beds(request):
