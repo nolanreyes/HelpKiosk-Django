@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'assistanceapp',
     'sheltermanagement',
+    'helpfinance',
     'rest_framework',
     'corsheaders',
     'django.contrib.gis',
