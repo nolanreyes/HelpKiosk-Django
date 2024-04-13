@@ -1,0 +1,9 @@
+{% extends 'helpfinance/base.html' %}
+{% block content %}
+    <h1>API Test</h1>
+    {% for data in card_data %}
+        <p>ID: {{ data.id }}</p>
+        <p>Text: {{ data.text }}</p>
+    {% endfor %}
+{% endblock %}
+

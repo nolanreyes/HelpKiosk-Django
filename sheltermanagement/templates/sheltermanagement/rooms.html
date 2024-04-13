@@ -23,7 +23,7 @@
             {% for room in rooms %}
                 <tr>
                     <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
-                        <a href="{% url 'room_details' id=room.id %}" class="text-black hover:text-gray-300">
+                        <a href="{% url 'shelter_room_details' id=room.id %}" class="text-black hover:text-gray-300">
                             {{ room.id }}
                         </a>
                     </td>

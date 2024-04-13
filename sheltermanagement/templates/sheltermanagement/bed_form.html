@@ -14,13 +14,13 @@
             {% if bed.id %}
                 <button type="submit" name="delete"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        formaction="{% url 'delete_bed' room.id bed.id %}">Delete
+                        formaction="{% url 'shelter_delete_bed' room.id bed.id %}">Delete
                 </button>
             {% endif %}
-            <a href="{% url 'room_details' id=room.id %}"
+            <a href="{% url 'shelter_room_details' id=room.id %}"
                class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">Cancel</a>
         </form>
-        <form action="{% url 'free_up_bed' bed.id %}" method="post" style="display: inline;">
+        <form action="{% url 'shelter_free_up_bed' bed.id %}" method="post" style="display: inline;">
             {% csrf_token %}
             <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
                 Free Up Bed

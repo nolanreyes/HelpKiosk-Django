@@ -1,0 +1,67 @@
+{% extends 'helpfinance/base.html' %}
+{% block content %}
+    <h1>Ethereum Demo</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+        {% for account in accounts %}
+            <div style="word-wrap: break-word; overflow-wrap: break-word;">
+                <h2>{{ account }}</h2>
+                <p id="balance-{{ account }}">Balance: Loading...</p>
+                <form action="{% url 'finance_contract_interaction' account %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Load Contract"
+                           class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+                </form>
+                <form id="deposit-form-{{ account }}" action="{% url 'finance_deposit_tokens' account %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Deposit Tokens"
+                           class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            {% for account in accounts %}
+                (function (account) {
+                    $("#deposit-form-" + account).submit(function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            url: "{% url 'finance_deposit_tokens' account %}",
+                            type: "POST",
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function (response) {
+                                alert(response.status);
+                            },
+                            error: function (response) {
+                                alert('Error');
+                            }
+                        });
+                    });
+
+                    function updateBalance() {
+                        $.ajax({
+                            url: "{% url 'finance_get_balance' account %}",
+                            type: "GET",
+                            success: function (response) {
+                                console.log("AJAX success", response);  // Debug line
+                                $("#balance-" + account).text("Balance: " + response.balance);
+                            },
+                            error: function (response) {
+                                console.log("AJAX error", response);  // Debug line
+                            }
+                        });
+                    }
+
+                    updateBalance();
+
+                    setInterval(updateBalance, 5000);
+                })("{{ account }}");
+            {% endfor %}
+        });
+    </script>
+{% endblock %}

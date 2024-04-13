@@ -43,8 +43,7 @@ class Location(models.Model):
 
         super(Location, self).save(*args, **kwargs)
 
-
-#class CustomUser(AbstractUser):
+# class CustomUser(AbstractUser):
 #    username = None
 #    email = None
 #    wallet_address = models.CharField(

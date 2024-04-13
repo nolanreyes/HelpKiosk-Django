@@ -1,11 +1,12 @@
-from django.forms import ModelForm
-from django import forms
+from django.forms import ModelForm, ChoiceField
 from .models import Location
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
 class LocationEdit(ModelForm):
+    location_type = ChoiceField(choices=Location.TYPE_CHOICES)
+
     class Meta:
         model = Location
         fields = '__all__'

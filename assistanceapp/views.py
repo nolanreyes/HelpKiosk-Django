@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 import pandas as pd
 from rest_framework.permissions import AllowAny
-
 from .models import Location
 from .forms import LocationEdit, CreateUserForm
 from django.contrib.auth.forms import UserCreationForm
@@ -12,7 +11,7 @@ from rest_framework import viewsets
 from .serializers import LocationSerializer
 import requests
 import json
-from django.http import JsonResponse
+from django.core.paginator import Paginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -36,7 +35,7 @@ def register_page(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('assistance_base')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -46,7 +45,7 @@ def login_page(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('base')
+                return redirect('assistance_base')
             else:
                 messages.info(request, 'Username or Password is incorrect')
 
@@ -56,7 +55,7 @@ def login_page(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('assistance_login')
 
 
 @login_required(login_url='login')
@@ -89,7 +88,11 @@ def map_view(request):
 @login_required(login_url='login')
 def manage_locations(request):
     # display existing Location entries
-    locations = Location.objects.all()
+    locations_list = Location.objects.all()
+    paginator = Paginator(locations_list, 15)
+
+    page_number = request.GET.get('page')
+    locations = paginator.get_page(page_number)
 
     if request.method == 'POST':
         form = LocationEdit(request.POST)

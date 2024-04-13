@@ -2,50 +2,80 @@
 {% load static %}
 
 {% block content %}
-    <h1>Manage Locations</h1>
+    <div class="flex">
+        <!-- create new locations -->
+        <div class="w-1/2 px-2">
+            <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
 
-    <!-- create new locations -->
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+        <!-- display locations from db -->
+        <div class="w-1/2 px-2">
+            <table>
+                <thead>
+                <tr>
+                    <th>Resource Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Type</th>
+                    <th>Address</th>
+                    <th>Description</th>
+                    <th>Hours</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for location in locations %}
+                    <tr>
+                        <td>{{ location.resource_name }}</td>
+                        <td>{{ location.latitude }}</td>
+                        <td>{{ location.longitude }}</td>
+                        <td>{{ location.get_location_type_display }}</td>
+                        <td>{{ location.address }}</td>
+                        <td>{{ location.description }}</td>
+                        <td>{{ location.hours }}</td>
+                        <td>
+                            <a href="{% url 'editLocation' location.resource_name %}">Edit</a>
+                            <a href="{% url 'deleteLocation' location.resource_name %}">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">No locations found.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if locations.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ locations.previous_page_number }}">previous</a>
+                    {% endif %}
 
-    <hr>
+                    <span class="current">
+                        Page {{ locations.number }} of {{ locations.paginator.num_pages }}.
+                    </span>
 
-    <!-- display locations from db -->
-    <table>
-        <thead>
-        <tr>
-            <th>Resource Name</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Type</th>
-            <th>Address</th>
-            <th>Description</th>
-            <th>Hours</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for location in locations %}
-            <tr>
-                <td>{{ location.resource_name }}</td>
-                <td>{{ location.latitude }}</td>
-                <td>{{ location.longitude }}</td>
-                <td>{{ location.get_location_type_display }}</td>
-                <td>{{ location.address }}</td>
-                <td>{{ location.description }}</td>
-                <td>{{ location.hours }}</td>
-                <td>
-                    <a href="{% url 'editLocation' location.resource_name %}">Edit</a>
-                    <a href="{% url 'deleteLocation' location.resource_name %}">Delete</a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="7">No locations found.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    {% if locations.has_next %}
+                        <a href="?page={{ locations.next_page_number }}">next</a>
+                        <a href="?page={{ locations.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
 {% endblock %}

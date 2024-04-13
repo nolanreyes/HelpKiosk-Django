@@ -8,12 +8,10 @@
                 <div id="map" style="height: 80vh;"></div>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="flex justify-center space-x-4">
             <div class="button-container">
-                <a class="btn btn-primary" href="{% url 'manageLocations' %}">+ Add Location</a>
-            </div>
-            <div class="col-4">
-                <button id="show-location-button" class="btn btn-primary btn-block">Show My Location</button>
+                <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" href="{% url 'manageLocations' %}">+ Add Location</a>
+                <button id="show-location-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Show My Location</button>
             </div>
         </div>
     </div>

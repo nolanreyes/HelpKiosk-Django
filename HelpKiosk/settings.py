@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'assistanceapp',
     'sheltermanagement',
-    'helpfinance',
+    'helpfinance.apps.HelpfinanceConfig',
     'rest_framework',
     'corsheaders',
     'django.contrib.gis',
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+
 ]
 
 MIDDLEWARE = [
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#AUTH_USER_MODEL = 'assistanceapp.CustomUser'
+# AUTH_USER_MODEL = 'assistanceapp.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -162,6 +163,11 @@ NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 TAILWIND_APP_NAME = 'theme'
 
+# Ethereum
+
+ETHEREUM_NODE_URL = 'http://127.0.0.1:8545/'
+#ETHEREUM_NODE_URL = 'https://surely-direct-jennet.ngrok-free.app'
+
 if socket.gethostname() == "Dylan-XPS":
     DATABASES["default"]["HOST"] = "localhost"
     DATABASES["default"]["PORT"] = docker_config.POSTGIS_PORT
@@ -173,7 +179,7 @@ else:
 if docker_config.DEPLOY_SECURE:
     # DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    ALLOWED_HOSTS = ['.dylannolan.com', 'localhost']
+    ALLOWED_HOSTS = ['.dylannolan.com', 'localhost', '192.168.0.156', 'surely-direct-jennet.ngrok-free.app']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:

@@ -34,7 +34,7 @@ def add_bed(request, room_id):
             form.save()
             room.capacity += 1
             room.save()
-            return redirect('room_details', id=room.id)
+            return redirect('shelter_room_details', id=room.id)
     else:
         form = BedForm(instance=bed)
         return render(request, 'sheltermanagement/bed_form.html', {'form': form, 'room': room, 'bed': bed})
@@ -47,12 +47,12 @@ def edit_bed(request, room_id, bed_id):
         bed.delete()
         room.capacity -= 1
         room.save()
-        return redirect('room_details', id=room.id)
+        return redirect('shelter_room_details', id=room.id)
     if request.method == 'POST':
         form = BedForm(request.POST, instance=bed)
         if form.is_valid():
             form.save()
-            return redirect('room_details', id=room.id)
+            return redirect('shelter_room_details', id=room.id)
     else:
         form = BedForm(instance=bed)
     return render(request, 'sheltermanagement/bed_form.html', {'form': form, 'room': room, 'bed': bed})
@@ -64,7 +64,7 @@ def free_up_bed(request, bed_id):
     bed.guest = None
     bed.save()
     messages.success(request, f"Bed {bed.bed_number} has been freed up successfully.")
-    return redirect('room_details', id=bed.room.id)
+    return redirect('shelter_room_details', id=bed.room.id)
 
 
 def guests(request):
@@ -78,15 +78,14 @@ def allocate_bed_to_guest(request, wallet_address):
         messages.success(request, "Bed allocated successfully.")
     else:
         messages.error(request, "Allocation failed. No matching bed or guest not found.")
-    return redirect('guests')
+    return redirect('shelter_guests')
 
 
 def allocate_bed_to_guest_by_wallet(wallet_address):
     from .models import Guest, Bed, Room
     try:
         guest = Guest.objects.get(wallet_address=wallet_address)
-        # Find beds in rooms that match the guest's gender or are mixed (X),
-        # and are not currently occupied by another guest.
+
         available_beds = Bed.objects.filter(
             room__gender_allocation__in=[guest.gender, 'X'],
             is_occupied=False
