@@ -40,7 +40,6 @@ def login_page(request):
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
-
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
@@ -48,7 +47,6 @@ def login_page(request):
                 return redirect('assistance_base')
             else:
                 messages.info(request, 'Username or Password is incorrect')
-
         context = {}
         return render(request, 'AssistanceApp/login.html', context)
 
@@ -87,10 +85,9 @@ def map_view(request):
 
 @login_required(login_url='login')
 def manage_locations(request):
-    # display existing Location entries
+    # display existing Location entries with pagination
     locations_list = Location.objects.all()
     paginator = Paginator(locations_list, 15)
-
     page_number = request.GET.get('page')
     locations = paginator.get_page(page_number)
 
@@ -101,7 +98,7 @@ def manage_locations(request):
             return redirect('manageLocations')
     else:
         form = LocationEdit()
-
+    # render the template
     context = {'form': form, 'locations': locations}
     return render(request, 'AssistanceApp/manageLocations.html', context)
 

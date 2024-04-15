@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
     path('', views.base, name='finance_base'),
     path('dashboard/', views.dashboard, name='finance_dashboard'),
-    # path('test-connection/', test_connection, name='test_connection'),
     path('api/', views.api_receive_data, name='finance_api_receive_data'),
     path('display_data/', views.display_data, name='finance_display_data'),
     path('contract_interaction/', eth_operations.contract_interaction, name='finance_contract_interaction'),

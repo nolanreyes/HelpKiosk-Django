@@ -59,11 +59,13 @@ def edit_bed(request, room_id, bed_id):
 
 
 def free_up_bed(request, bed_id):
+    # fetch the bed from the database
     bed = get_object_or_404(Bed, id=bed_id)
+    # set the bed as not occupied and remove the guest from the bed
     bed.is_occupied = False
     bed.guest = None
     bed.save()
-    messages.success(request, f"Bed {bed.bed_number} has been freed up successfully.")
+    messages.success(request, f"bed {bed.bed_number} has been freed up successfully")
     return redirect('shelter_room_details', id=bed.room.id)
 
 
@@ -73,39 +75,32 @@ def guests(request):
 
 
 def allocate_bed_to_guest(request, wallet_address):
-    # Assuming your function returns True if allocation is successful, otherwise False
-    if allocate_bed_to_guest_by_wallet(wallet_address):
-        messages.success(request, "Bed allocated successfully.")
-    else:
-        messages.error(request, "Allocation failed. No matching bed or guest not found.")
-    return redirect('shelter_guests')
-
-
-def allocate_bed_to_guest_by_wallet(wallet_address):
-    from .models import Guest, Bed, Room
     try:
+        # fetch the guest from the database using the wallet address
         guest = Guest.objects.get(wallet_address=wallet_address)
-
-        available_beds = Bed.objects.filter(
+        # find the first available bed that matches the guest gender
+        bed_to_allocate = Bed.objects.filter(
             room__gender_allocation__in=[guest.gender, 'X'],
             is_occupied=False
-        ).select_related('room').order_by('room__room_number')
-
-        if available_beds.exists():
-            bed_to_allocate = available_beds.first()
+        ).order_by('room__room_number').first()
+        # allocate bed and mark as occupied
+        if bed_to_allocate:
             bed_to_allocate.guest = guest
             bed_to_allocate.is_occupied = True
             bed_to_allocate.save()
             print(f"Allocated bed in room {bed_to_allocate.room.room_number} to guest with wallet {wallet_address}.")
-            return True
+            messages.success(request, "Bed allocated successfully.")
         else:
+            # no available bed return statement
             print("No available beds match the guest's gender.")
-            return False
+            messages.error(request, "Allocation failed. No matching bed or guest not found.")
     except Guest.DoesNotExist:
+        # If the guest is not found, log the failure and notify the user.
         print("Guest with wallet address not found.")
-        return False
+        messages.error(request, "Allocation failed. No matching bed or guest not found.")
+    return redirect('shelter_guests')
 
 
 def management(request):
-    # Logic for management/operations
+    # code for management
     return render(request, 'sheltermanagement/management.html')

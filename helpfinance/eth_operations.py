@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from web3 import Web3, HTTPProvider
-from .web3_util import get_web3_connection
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
@@ -9,7 +8,7 @@ from django.conf import settings
 
 
 def test_connection(request):
-    w3 = get_web3_connection()
+    w3 = connect_to_ethereum_node()
     if w3.is_connected():
         return HttpResponse('Connected to the blockchain')
     else:
@@ -27,24 +26,22 @@ def load_contract(w3):
     with open('helpfinance/contracts/builds/Deploy#HELPToken.json', 'r') as f:
         contract_data = json.load(f)
         contract_abi = contract_data['abi']
-
     # The address of your deployed contract
     contract_address = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-
     # Create a contract instance
     contract = w3.eth.contract(address=contract_address, abi=contract_abi)
     return contract
 
 
 def deposit_tokens(w3, contract, distributor_account, user_account):
-    # Deposit 10 hTKN to each user account from the distributor account
+    # deposit 10 hTKN to each user account from the distributor account when used
     amount = Web3.to_wei(10, 'ether')
     txn_hash = contract.functions.deposit(user_account, amount).transact({
         'from': distributor_account,
         'nonce': w3.eth.get_transaction_count(distributor_account),
         'gas': 1728712,
         'gasPrice': Web3.to_wei('21', 'gwei'),
-        'chainId': 31337  # Replace with your network's chain ID
+        'chainId': 31337  
     })
     w3.eth.wait_for_transaction_receipt(txn_hash)
 
@@ -68,12 +65,9 @@ def contract_interaction(request, account):
     if request.method == 'POST':
         w3 = connect_to_ethereum_node()
         contract = load_contract(w3)
-
         # Distributor account
         distributor_account = w3.eth.accounts[0]
-
         deposit_tokens(w3, contract, distributor_account, account)
-
         return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'status': 'failed', 'error': 'Invalid request method'})
@@ -81,9 +75,14 @@ def contract_interaction(request, account):
 
 def get_account_from_card():
     # Local IP address of the Raspberry Pi for testing purposes
-    url = 'http://192.168.0.185:5000/read_card'
+    #url = 'http://192.168.0.185:5000/read_card'
+
+    # TUD IP address of the Raspberry Pi
+    url = 'http://10.156.34.61:5000/read_card'
+
     # Public URL of the Raspberry Pi using ngrok for accessing from external networks
-    #url = 'http://surely-direct-jennet.ngrok-free.app/read_card'
+    # url = 'http://surely-direct-jennet.ngrok-free.app/read_card'
+
     # Send a GET request to the Raspberry Pi endpoint
     response = requests.get(url)
     # Check if the request was successful
@@ -99,13 +98,11 @@ def get_account_from_card():
 
 
 def process_transaction(w3, contract, shop_account, card_data, amount_owed):
-    # Retrieve the user account from the card data
+    # retrieve the user account from the card data
     user_account = get_account_from_card()
-
-    # Convert the amount owed to hTKN's smallest unit assuming it has 18 decimal places
+    # convert the amount to wei
     amount = Web3.to_wei(amount_owed, 'ether')
-
-    # Create a transaction from the user account to the shop account
+    # create a transaction from the user account to the shop account
     txn_hash = contract.functions.transfer(shop_account, amount).transact({
         'from': user_account,
         'nonce': w3.eth.get_transaction_count(user_account),
@@ -113,28 +110,19 @@ def process_transaction(w3, contract, shop_account, card_data, amount_owed):
         'gasPrice': Web3.to_wei('21', 'gwei'),
         'chainId': 31337  # Replace with your network's chain ID
     })
-
-    # Wait for the transaction to be mined
+    # wait for the transaction to be mined
     w3.eth.wait_for_transaction_receipt(txn_hash)
-
     return txn_hash
-
-
-# def get_product_price(product_id):
-#    # For now, just return a fixed price
-#    return 10  # Replace this with your own logic to get the product price
 
 
 def get_shop_account():
     # For now, just return this account
-    return '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'  # Replace this with your own logic to get the shop account
+    return '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199'  
 
 
 def process_shop_transaction(w3, contract, product_id, card_data, amount_owed):
     # Get the shop account
     shop_account = get_shop_account()
-
     # Process the transaction
     txn_hash = process_transaction(w3, contract, shop_account, card_data, amount_owed)
-
     return txn_hash

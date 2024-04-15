@@ -8,7 +8,7 @@ from django.dispatch import receiver
 class Shelter(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    location = models.PointField(help_text=_("Geographic location of the shelter"))
+    location = models.PointField(help_text=_("location of the shelter"))
     contact_info = models.CharField(max_length=255)
 
     def __str__(self):
@@ -59,3 +59,4 @@ class Booking(models.Model):
     check_in_date = models.DateField()
     check_out_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
+

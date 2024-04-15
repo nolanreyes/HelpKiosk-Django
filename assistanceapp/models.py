@@ -6,15 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 class Location(models.Model):
     TYPE_CHOICES = [
-        ('SHELTER', 'Shelter'),
-        ('FOOD', 'Food'),
-        ('HEALTH', 'Health Services'),
-        ('HYGIENE', 'Hygiene'),
-        ('LEGAL', 'Legal'),
-        ('WIFI', 'Wifi'),
-        ('OTHER', 'Other'),
+        ('SHELTER', 'Shelter'), ('FOOD', 'Food'), ('HEALTH', 'Health Services'), ('HYGIENE', 'Hygiene'),('LEGAL', 'Legal'), ('WIFI', 'Wifi'), ('OTHER', 'Other'),
     ]
-
     resource_name = models.CharField(max_length=100)
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -30,15 +23,14 @@ class Location(models.Model):
         return self.resource_name
 
     def save(self, *args, **kwargs):
-        # Check if any duplicates before making new
+        # Check if any duplicates already exist
         existing_location = Location.objects.filter(
             resource_name=self.resource_name,
             latitude=self.latitude,
             longitude=self.longitude
         ).first()
-
         if existing_location:
-            # dont create if exists
+            # dont save if it exists
             return
 
         super(Location, self).save(*args, **kwargs)
