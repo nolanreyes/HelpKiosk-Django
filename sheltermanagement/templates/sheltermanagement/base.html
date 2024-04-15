@@ -1,0 +1,21 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shelter Management System</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-200">
+<div class="flex h-screen">
+    <!-- Side Navigation -->
+    {% include 'sheltermanagement/sidenav.html' %}
+
+    <!-- Main Content Area -->
+    <div class="w-full bg-white p-4" id="main">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+</body>
+</html>

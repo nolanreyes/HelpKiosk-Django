@@ -16,8 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open('secret_key.txt') as f:
     SECRET_KEY = f.read().strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+    # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 # ALLOWED_HOSTS = ['10.0.2.2', '127.0.0.1', 'localhost']
 
@@ -30,12 +30,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'assistanceapp',
+    'sheltermanagement',
+    'helpfinance.apps.HelpfinanceConfig',
     'rest_framework',
     'corsheaders',
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
-    'assistanceapp',
+    'django_htmx',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+
 ]
 
 MIDDLEWARE = [
@@ -48,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'HelpKiosk.urls'
@@ -103,6 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AUTH_USER_MODEL = 'assistanceapp.CustomUser'
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -148,6 +159,15 @@ REST_FRAMEWORK = {
 # Allow all origins for testing purposes
 CORS_ALLOW_ALL_ORIGINS = True
 
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
+TAILWIND_APP_NAME = 'theme'
+
+# Ethereum
+
+ETHEREUM_NODE_URL = 'http://127.0.0.1:8545/'
+#ETHEREUM_NODE_URL = 'https://surely-direct-jennet.ngrok-free.app'
+
 if socket.gethostname() == "Dylan-XPS":
     DATABASES["default"]["HOST"] = "localhost"
     DATABASES["default"]["PORT"] = docker_config.POSTGIS_PORT
@@ -157,9 +177,9 @@ else:
     DATABASES["default"]["PORT"] = 5432
     SECURE_SSL_REDIRECT = True
 if docker_config.DEPLOY_SECURE:
-    DEBUG = False
+    # DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    ALLOWED_HOSTS = ['.dylannolan.com', 'localhost']
+    ALLOWED_HOSTS = ['.dylannolan.com', 'localhost', '192.168.0.156', 'surely-direct-jennet.ngrok-free.app']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:

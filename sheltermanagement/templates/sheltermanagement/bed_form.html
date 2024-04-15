@@ -1,0 +1,30 @@
+{% extends "sheltermanagement/base.html" %}
+
+{% block content %}
+    <div class="container mx-auto">
+        <h2>{% if bed.id %}Edit Bed {{ bed.bed_number }}{% else %}Add New Bed{% endif %} to
+            Room {{ room.room_number }}</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                    class="{% if bed.id %}bg-blue-500 hover:bg-blue-700{% else %}bg-green-500 hover:bg-green-700{% endif %} text-white font-bold py-2 px-4 rounded">
+                {% if bed.id %}Save Changes{% else %}Add Bed{% endif %}
+            </button>
+            {% if bed.id %}
+                <button type="submit" name="delete"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                        formaction="{% url 'shelter_delete_bed' room.id bed.id %}">Delete
+                </button>
+            {% endif %}
+            <a href="{% url 'shelter_room_details' id=room.id %}"
+               class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">Cancel</a>
+        </form>
+        <form action="{% url 'shelter_free_up_bed' bed.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                Free Up Bed
+            </button>
+        </form>
+    </div>
+{% endblock %}

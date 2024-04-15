@@ -1,0 +1,25 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help Finance System</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/htmx.org"></script>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-200">
+<div class="flex h-screen">
+    <!-- Side Navigation -->
+    {% include 'helpfinance/sidenav.html' %}
+
+    <!-- Main Content Area -->
+    <div class="w-full bg-white p-4" id="main">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

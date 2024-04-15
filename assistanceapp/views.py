@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 import pandas as pd
 from rest_framework.permissions import AllowAny
-
 from .models import Location
 from .forms import LocationEdit, CreateUserForm
 from django.contrib.auth.forms import UserCreationForm
@@ -11,7 +10,8 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import LocationSerializer
 import requests
-from django.http import JsonResponse
+import json
+from django.core.paginator import Paginator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -35,27 +35,25 @@ def register_page(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('assistance_base')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
-
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
                 login(request, user)
-                return redirect('base')
+                return redirect('assistance_base')
             else:
                 messages.info(request, 'Username or Password is incorrect')
-
         context = {}
         return render(request, 'AssistanceApp/login.html', context)
 
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('assistance_login')
 
 
 @login_required(login_url='login')
@@ -87,8 +85,11 @@ def map_view(request):
 
 @login_required(login_url='login')
 def manage_locations(request):
-    # display existing Location entries
-    locations = Location.objects.all()
+    # display existing Location entries with pagination
+    locations_list = Location.objects.all()
+    paginator = Paginator(locations_list, 15)
+    page_number = request.GET.get('page')
+    locations = paginator.get_page(page_number)
 
     if request.method == 'POST':
         form = LocationEdit(request.POST)
@@ -97,7 +98,7 @@ def manage_locations(request):
             return redirect('manageLocations')
     else:
         form = LocationEdit()
-
+    # render the template
     context = {'form': form, 'locations': locations}
     return render(request, 'AssistanceApp/manageLocations.html', context)
 
@@ -148,3 +149,16 @@ class GetWeatherData(APIView):
             return Response(data)
         else:
             return Response(data, status=response.status_code)
+
+
+# Bookings
+def send_booking_request(room_id, check_in_date, check_out_date):
+    data = {
+        'room': room_id,
+        'check_in_date': check_in_date,
+        'check_out_date': check_out_date,
+        # fix these and add more info
+    }
+    response = requests.post('http://localhost:8000/sheltermanagement/api/bookings/', data=json.dumps(data),
+                             headers={'Content-Type': 'application/json'})
+    return response.json()

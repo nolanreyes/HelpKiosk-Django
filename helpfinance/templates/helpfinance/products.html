@@ -1,0 +1,67 @@
+{% extends 'helpfinance/base.html' %}
+{% block content %}
+    <h1>Products</h1>
+    {% for product in products %}
+        <form id="sell-product-form-{{ product.id }}" action="{% url 'sell_product' product.id %}" method="post">
+            {% csrf_token %}
+            <p>{{ product.name }}: {{ product.price }}</p>
+            <input type="submit" value="Buy" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+        </form>
+        <p id="transaction-hash-{{ product.id }}"></p>
+    {% endfor %}
+
+    <h2>Custom Price</h2>
+    <form id="sell-product-form-custom" action="{% url 'sell_product' 0 %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="price" min="0" step="0.01" placeholder="Enter a custom price">
+        <input type="submit" value="Buy" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+    </form>
+    <p id="transaction-hash-custom"></p>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function () {
+            {% for product in products %}
+                (function (product) {
+                    if (product.id != 0) {
+                        $("#sell-product-form-" + product.id).submit(function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                url: "{% url 'sell_product' product.id %}",
+                                type: "POST",
+                                data: {
+                                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                                },
+                                success: function (response) {
+                                    $("#transaction-hash-" + product.id).text("Transaction Hash: " + response.transaction_hash);
+                                },
+                                error: function (response) {
+                                    alert('Error');
+                                }
+                            });
+                        });
+                    }
+                })({{ product.id }});
+            {% endfor %}
+
+            $("#sell-product-form-custom").submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{% url 'sell_product' 0 %}",
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        price: $("input[name='price']").val()
+                    },
+                    success: function (response) {
+                        $("#transaction-hash-custom").text("Transaction Hash: " + response.transaction_hash);
+                    },
+                    error: function (response) {
+                        alert('Error');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
