@@ -75,10 +75,10 @@ def contract_interaction(request, account):
 
 def get_account_from_card():
     # Local IP address of the Raspberry Pi for testing purposes
-    #url = 'http://192.168.0.185:5000/read_card'
+    url = 'http://192.168.0.185:5000/read_card'
 
     # TUD IP address of the Raspberry Pi
-    url = 'http://10.156.34.61:5000/read_card'
+    #url = 'http://10.156.34.61:5000/read_card'
 
     # Public URL of the Raspberry Pi using ngrok for accessing from external networks
     # url = 'http://surely-direct-jennet.ngrok-free.app/read_card'

@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse
+from helpfinance.eth_operations import get_account_from_card
 from .models import Room, Bed, Guest
 from .forms import BedForm
 
@@ -74,6 +76,24 @@ def guests(request):
     return render(request, 'sheltermanagement/guests.html', {'guests': guests})
 
 
+def add_guest(request):
+    if request.method == 'POST':
+        # Get the wallet address from the RFID card
+        wallet_address = get_account_from_card()
+        # Create a new guest with this wallet address
+        Guest.objects.create(wallet_address=wallet_address)
+        return redirect('shelter_guests')
+
+
+def remove_guest(request, wallet_address):
+    if request.method == 'POST':
+        # Get the guest with this wallet address
+        guest = Guest.objects.get(wallet_address=wallet_address)
+        # Delete this guest
+        guest.delete()
+        return redirect('shelter_guests')
+
+
 def allocate_bed_to_guest(request, wallet_address):
     try:
         # fetch the guest from the database using the wallet address
@@ -99,6 +119,38 @@ def allocate_bed_to_guest(request, wallet_address):
         print("Guest with wallet address not found.")
         messages.error(request, "Allocation failed. No matching bed or guest not found.")
     return redirect('shelter_guests')
+
+
+def allocate_bed_to_guest_flutter(request):
+    # Get the wallet address from the card
+    wallet_address = get_account_from_card()
+
+    # Redirect to the 'allocate_bed_to_guest' view with the wallet_address as a parameter
+    return redirect('shelter_allocate_bed_to_guest', wallet_address=wallet_address)
+
+
+def authenticate_guest(request):
+    # Get the wallet address from the card
+    wallet_address = get_account_from_card()
+    try:
+        # Get the guest with this wallet address
+        guest = Guest.objects.get(wallet_address=wallet_address)
+
+        # Check if this guest is associated with a bed
+        if guest.bed:
+            # If the guest is associated with a bed, return a success response
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Guest is associated with a bed.',
+                'bed_number': guest.bed.bed_number,
+                'room_number': guest.bed.room.room_number
+            })
+        else:
+            # If the guest is not associated with a bed, return a failure response
+            return JsonResponse({'status': 'failed', 'message': 'Guest is not associated with a bed.'})
+    except Guest.DoesNotExist:
+        # If the guest does not exist, return a failure response
+        return JsonResponse({'status': 'failed', 'message': 'Guest does not exist.'})
 
 
 def management(request):

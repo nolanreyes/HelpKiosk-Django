@@ -91,7 +91,7 @@ def ethereum_demo(request):
 
 @csrf_exempt
 def deposit_tokens_view(request, account):
-    if request.method == 'POST':
+    if request.method in ['GET', 'POST']:
         w3 = connect_to_ethereum_node()
         contract = load_contract(w3)
         # Distributor account
@@ -111,3 +111,9 @@ def get_user_balance(request):
     # Get the balance of the account
     balance = get_balance_as_number(request, account)
     return JsonResponse({'balance': str(balance)})
+
+
+from django.shortcuts import render
+
+def donate_view(request):
+    return render(request, 'helpfinance/donate.html')

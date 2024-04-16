@@ -1,1 +1,17 @@
 {% extends 'sheltermanagement/base.html' %}
+
+{% block content %}
+
+
+    <button id="authenticate-button" hx-get="{% url 'authenticate_guest' %}" hx-trigger="click"
+            hx-target="#response-data" hx-indicator="#loading-indicator"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Authenticate Guest
+    </button>
+
+
+    <div id="response-data" class="mt-4 text-lg">
+    </div>
+
+    <div id="loading-indicator" style="display: none;" class="mt-4 text-lg">Loading...</div>
+{% endblock %}

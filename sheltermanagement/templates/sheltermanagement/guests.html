@@ -43,6 +43,10 @@
                     <td class="px-5 py-3 border-b border-gray-200 bg-white text-sm">
                         <a href="{% url 'shelter_allocate_bed_to_guest' wallet_address=guest.wallet_address %}"
                            class="text-blue-600 hover:text-blue-800">Allocate Bed</a>
+                        <form action="{% url 'remove_guest' wallet_address=guest.wallet_address %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
+                        </form>
                     </td>
                 </tr>
             {% empty %}
@@ -54,5 +58,9 @@
             {% endfor %}
             </tbody>
         </table>
+        <form action="{% url 'add_guest' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="text-blue-600 hover:text-blue-800">Add Guest</button>
+        </form>
     </div>
 {% endblock %}
